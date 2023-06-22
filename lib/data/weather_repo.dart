@@ -1,6 +1,8 @@
 import 'package:di_demo/data/weather_service.dart';
 import 'package:di_demo/models/weather.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class WeatherRepo {
   final WeatherService _service;
 

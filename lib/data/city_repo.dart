@@ -1,6 +1,8 @@
 import 'package:di_demo/data/city_service.dart';
 import 'package:di_demo/models/city.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class CityRepo {
   final CityService _service;
 

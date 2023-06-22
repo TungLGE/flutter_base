@@ -1,10 +1,12 @@
+import 'package:di_demo/models/city.dart';
 import 'package:di_demo/models/weather.dart';
 import 'package:flutter/material.dart';
 
 class WeatherWidget extends StatelessWidget {
   final Weather weather;
+  final City city;
 
-  const WeatherWidget({super.key, required this.weather});
+  const WeatherWidget({super.key, required this.weather, required this.city});
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +15,9 @@ class WeatherWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "The weather in Hanoi right now",
-            style: TextStyle(
+          Text(
+            "The weather in ${city.getFullName()} right now",
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -1,7 +1,7 @@
-import 'package:di_demo/data/city_repo.dart';
-import 'package:di_demo/data/weather_repo.dart';
+import 'package:di_demo/di/di.dart';
 import 'package:di_demo/presentation/home/home_cubit.dart';
 import 'package:di_demo/presentation/home/widget/empty_widget.dart';
+import 'package:di_demo/presentation/home/widget/search_bar_widget.dart';
 import 'package:di_demo/presentation/home/widget/weather_widget.dart';
 import 'package:di_demo/util/presentation_utils.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider<HomeCubit>(
-          create: (context) => HomeCubit(
-            context.read<WeatherRepo>(),
-            context.read<CityRepo>()
-          ),
-        )
-      ],
+      providers: [BlocProvider<HomeCubit>(create: (context) => getIt())],
       child: const HomeContent(),
     );
   }
@@ -45,8 +38,22 @@ class _HomeContentState extends State<HomeContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _buildContent(context),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(16),
+            child: SearchBarWidget(
+              onSearch: (query) {
+                context.read<HomeCubit>().searchCity(query);
+              },
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: _buildContent(context),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -59,7 +66,10 @@ class _HomeContentState extends State<HomeContent> {
       case DataState.loading:
         return const CircularProgressIndicator();
       case DataState.success:
-        return WeatherWidget(weather: homeState.weather!);
+        return WeatherWidget(
+          weather: homeState.weather!,
+          city: homeState.city!,
+        );
       case DataState.fail:
         return const EmptyWidget();
     }

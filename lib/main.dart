@@ -1,7 +1,9 @@
 import 'package:di_demo/data/city_repo.dart';
 import 'package:di_demo/data/city_service.dart';
+import 'package:di_demo/data/city_service_mock.dart';
 import 'package:di_demo/data/weather_repo.dart';
 import 'package:di_demo/data/weather_service.dart';
+import 'package:di_demo/data/weather_service_mock.dart';
 import 'package:di_demo/presentation/home/home_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -14,21 +16,27 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
+  static bool isDebug = false;
+
   final List<RepositoryProvider<Object>> _provider = [
     RepositoryProvider<WeatherRepo>(
       create: (context) => WeatherRepo(
-        WeatherService(
-          Dio(),
-          baseUrl: "https://api.openweathermap.org",
-        ),
+        isDebug
+            ? WeatherServiceMock()
+            : WeatherService(
+                Dio(),
+                baseUrl: "https://api.openweathermap.org",
+              ),
       ),
     ),
     RepositoryProvider<CityRepo>(
       create: (context) => CityRepo(
-        CityService(
-          Dio(),
-          baseUrl: "https://api.openweathermap.org",
-        ),
+        isDebug
+            ? CityServiceMock()
+            : CityService(
+                Dio(),
+                baseUrl: "https://api.openweathermap.org",
+              ),
       ),
     ),
   ];
